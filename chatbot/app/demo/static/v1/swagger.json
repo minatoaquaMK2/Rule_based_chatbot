@@ -1,0 +1,64 @@
+{
+  "swagger": "2.0",
+  "basePath": "/v1",
+  "info": {
+    "version": "0.0.1",
+    "title": "my chatbot",
+    "description": "chatbot"
+  },
+  "consumes": [
+    "appliction/json"
+  ],
+  "produces": [
+    "appliction/json"
+  ],
+  "paths": {
+    "/ask": {
+      "post": {
+        "summary": "creat a student",
+        "description": "this is uesed for creating a student(zid and full name)",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "hello"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "hello"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "description": "The user ID"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

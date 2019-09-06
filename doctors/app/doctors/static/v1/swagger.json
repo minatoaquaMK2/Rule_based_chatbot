@@ -1,0 +1,151 @@
+{
+  "swagger": "2.0",
+  "basePath": "/v1",
+  "info": {
+    "version": "0.0.1",
+    "title": "My Clinic",
+    "description": "Clinic API"
+  },
+  "consumes": [
+    "appliction/json"
+  ],
+  "produces": [
+    "appliction/json"
+  ],
+  "tags": [
+    {
+      "name": "doctor"
+    }
+  ],
+  "paths": {
+    "/doctors": {
+      "get": {
+        "tags": [
+          "doctor"
+        ],
+        "summary": "get a list of doctors",
+        "description": "get a list of doctors",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "doctors": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "example": "John"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "error message"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "doctor"
+        ],
+        "summary": "creat a doctor",
+        "description": "this is uesed for creating a doctor",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "schema": {
+              "$ref": "#/definitions/doctor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/doctor"
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doctors/{doctor_name}": {
+      "get": {
+        "tags": [
+          "doctor"
+        ],
+        "summary": "get info of doctors",
+        "parameters": [
+          {
+            "name": "doctor_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "$ref": "#/definitions/doctor"
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "error message"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "doctor": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Jessica Wong"
+        },
+        "location": {
+          "type": "string",
+          "example": "Mascot"
+        },
+        "specialization": {
+          "type": "string",
+          "example": "Orthodontics"
+        }
+      }
+    }
+  }
+}

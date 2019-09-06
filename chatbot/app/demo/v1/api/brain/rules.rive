@@ -1,0 +1,164 @@
+! version = 2.0
+
++ hi *
+- hi user!
+
++ hi
+- hi
+
+
+> object listDoctors python
+    import requests
+    import json
+    r = requests.get('http://localhost:7777/v1/doctors')
+    data = r.json()
+    result_list = []
+    for doctor in data['doctors']:
+        result_list.append(doctor['name'])
+    result = ', '.join(result_list)
+    return result
+< object
+
+> object doctorInfo python
+    import requests
+    import json
+    name = ' '.join(args)
+    r = requests.get('http://localhost:7777/v1/doctors/'+name)
+    data = r.json()
+    result = f"\nname:{name} specialization:{data['specialization']} location:{data['location']}\n"
+    return result
+< object
+
+> object timeslot python
+    import requests
+    import json
+    name = ' '.join(args)
+    r = requests.get('http://localhost:7778/v1/timesolts/'+name)
+    if r.status_code == 200:
+        result = r.json()
+        m = "\n"
+        for e in result:
+            m = m + e['time']+"\n"
+        return m
+    else:
+        massage = r.json()
+        return massage
+< object
+
+> object booking python
+    import requests
+    import json
+    doctor_name = ' '.join(args[4:])
+    time = ' '.join(args[:4])
+    payload = {"doctor_name":doctor_name,"timesolt": time }
+    r = requests.post('http://localhost:7778/v1/reservations',data=json.dumps(payload))
+    if r.status_code == 200:
+        result = r.json()
+        massage = f"Booking has been completed\nDoctor name:{result['doctor_name']}\nTime:{result['timesolt']}\nBooking number:{result['reservation_id']}"
+    else:
+        massage = r.json()['message']
+    return massage
+< object
+
+> object check python
+    import requests
+    import json
+    doctor_name = ' '.join(args[4:])
+    date = ' '.join(args[:3])
+    time = args[3]
+    r = requests.get(f'http://localhost:7778/v1/timesolts/{doctor_name}/{date}/{time}')
+    massage = ''
+    if r.status_code == 200:
+        result = r.json()
+        m = ''
+        if(result['timesolt']['status'] == 'reserved'):
+            if result['suggestion']['time'] != 'null':
+                m = f"The time slot is reserved. what about {result['suggestion']['time']}, it is available."
+            else:
+                m = f"The time slot is reserved. no other time slot is available."
+        else:
+            m = f"The time slot is available"
+        return m
+    else:
+        massage = r.json()['message']
+        return m
+< object
+
+> object cancel python
+    import requests
+    import json
+    id = args[0]
+    payload = {"status": "available"}
+    r = requests.put('http://localhost:7778/v1/reservations/'+id,data=json.dumps(payload))
+    if r.status_code == 200:
+        result = r.json()
+        massage = f"Booking has been canceled\nBooking number:{result['reservation_id']}"
+    else:
+        massage = r.json()['message']
+    return massage
+< object
+
+
+
++ hello
+- Hello there, human.
+- Hi there.{weight=4}
+- Hello. :){weight=3}
+
++ my name is *
+- Nice to meet you, <star>!
+
++ how are you
+- Good How are you
+
++ good
+% good how are you
+- That's great.
+
++ can you list all doctor in the clinic
+- The available doctors: <call>listDoctors</call>\n
+^ Which doctor do you prefer?\n
+^ I can give you more information about him/her.
+
++ can you tell me more about *
+- <call>doctorInfo <star1></call>
+
+
++ time slot for *
+- time slots for <star1>:<call>timeslot <star1></call>
+
++ how do i book a time slot
+- You can book a time slot by typing book (time slot) for (doctor name)
+
++ book * for *
+- Do you want to book <star1> for <star2>?<set timeslot=<star1>><set doctorname=<star2>>
+
++ how do i cancel a booking
+- You can book a time slot by typing cancel (Booking number)
+
++ how do i check a time slot
+- You can check a time slot by typing check (time slot) for (doctor name)
+
++ cancel #
+- Do you want to cancel booking <star1>?<set booking_id=<star1>>
+
++ check * for *
+- <call>check <star1> <star2></call>
+
++ yes
+% do you want to book *
+- <call>booking <get timeslot> <get doctorname></call>
+
++ yes
+% do you want to cancel booking *
+- <call>cancel <get booking_id></call>
+
+
++ what did i just say
+- You just said "<input1>"
+
++ why did you say that
+- I said "<reply1>" because you said "<input1>"
+
++ *
+- I'm not sure how to reply to that.

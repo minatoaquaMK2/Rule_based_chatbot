@@ -1,0 +1,257 @@
+{
+  "swagger": "2.0",
+  "basePath": "/v1",
+  "info": {
+    "version": "0.0.1",
+    "title": "My TimeSolt",
+    "description": "TimeSolt API"
+  },
+  "consumes": [
+    "appliction/json"
+  ],
+  "produces": [
+    "appliction/json"
+  ],
+  "tags": [
+    {
+      "name": "TimeSolt"
+    }
+  ],
+  "paths": {
+    "/reservations": {
+      "post": {
+        "tags": [
+          "TimeSolt"
+        ],
+        "summary": "Reserve timeslot",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "schema": {
+              "$ref": "#/definitions/reservation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reservation_id": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "doctor_name": {
+                  "type": "string",
+                  "example": "Jessica Wong"
+                },
+                "timesolt": {
+                  "type": "string",
+                  "example": "tue 06 aug 0900"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "input is invalid(error message)"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reservations/{reservation_id}": {
+      "put": {
+        "tags": [
+          "TimeSolt"
+        ],
+        "summary": "Cancelling appointment",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "name": "reservation_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "reservation_id": {
+                  "type": "integer",
+                  "example": 2
+                },
+                "message": {
+                  "type": "string",
+                  "example": "canceled successful"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Doctor not found(error message)"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timesolts/{doctor_name}": {
+      "get": {
+        "tags": [
+          "TimeSolt"
+        ],
+        "summary": "get a list of timeSolt",
+        "parameters": [
+          {
+            "name": "doctor_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/timesolt"
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Resource Not Found(error message)"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/timesolts/{doctor_name}/{date}/{time}": {
+      "get": {
+        "tags": [
+          "TimeSolt"
+        ],
+        "summary": "get info of a timeSolt",
+        "parameters": [
+          {
+            "name": "doctor_name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "time",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "timesolt": {
+                  "$ref": "#/definitions/timesolt"
+                },
+                "suggestion": {
+                  "$ref": "#/definitions/timesolt"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "input is invalid",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Doctor not found(error message)"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "reservation": {
+      "type": "object",
+      "properties": {
+        "doctor_name": {
+          "type": "string",
+          "example": "Jessica Wong"
+        },
+        "timesolt": {
+          "type": "string",
+          "example": "tue 06 aug 0900"
+        }
+      }
+    },
+    "timesolt": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string",
+          "example": "tue 06 aug 0900"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "reserved",
+            "available"
+          ]
+        }
+      }
+    }
+  }
+}
