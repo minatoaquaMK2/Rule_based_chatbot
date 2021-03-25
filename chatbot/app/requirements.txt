@@ -13,7 +13,7 @@ json-spec==0.10.1
 jsonschema==2.6.0
 MarkupSafe==1.1.1
 pytz==2019.1
-PyYAML==4.2b1
+PyYAML==5.4
 requests==2.22.0
 rivescript==1.14.9
 six==1.12.0
